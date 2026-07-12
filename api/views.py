@@ -1,21 +1,21 @@
 from rest_framework import generics, status
 # from rest_framework.response import Response
-from .models import Card, CardList
-from .serializers import CardSerializer, CardListSerializer
+from .models import Card, Deck
+from .serializers import CardSerializer, DeckSerializer
 
 # Create your views here.
-class CardListCreation(generics.ListCreateAPIView):
-    queryset = CardList.objects.all()
-    serializer_class = CardListSerializer
+class DeckCreation(generics.ListCreateAPIView):
+    queryset = Deck.objects.all()
+    serializer_class = DeckSerializer
 
     # def delete(self, request, *args, **kwargs):
-    #     CardList.objects.all().delete()
+    #     Deck.objects.all().delete()
     #     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CardListRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CardList.objects.all()
-    serializer_class = CardListSerializer
+class DeckRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Deck.objects.all()
+    serializer_class = DeckSerializer
     lookup_field = "pk"
 
 
@@ -24,10 +24,12 @@ class CardCreation(generics.ListCreateAPIView):
     serializer_class = CardSerializer
 
 
-class CardsFromList(generics.ListAPIView):
+class CardsFromDeck(generics.ListAPIView):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
-    lookup_field = ""
+
+    def get_queryset(self):
+        return Card.objects.filter(deck_id = self.kwargs["deck_id"])
 
 
 class CardRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
@@ -38,7 +40,7 @@ class CardRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         queryset = self.queryset
         obj = generics.get_object_or_404(
             queryset,
-            card_list=self.kwargs["card_list"],
+            deck_id=self.kwargs["deck_id"],
             index=self.kwargs["index"]
         )
         self.check_object_permissions(self.request, obj)

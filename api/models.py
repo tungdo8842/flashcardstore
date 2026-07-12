@@ -1,6 +1,6 @@
 from django.db import models
 
-class CardList(models.Model):
+class Deck(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.TextField(max_length=256)
 
@@ -9,7 +9,7 @@ class CardList(models.Model):
 
 
 class Card(models.Model):
-    card_list = models.ForeignKey(CardList, on_delete=models.CASCADE)
+    deck_id = models.ForeignKey(Deck, on_delete=models.CASCADE)
     index = models.IntegerField()
     front = models.TextField(max_length=2048)
     back = models.TextField(max_length=2048)
