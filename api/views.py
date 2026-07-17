@@ -1,9 +1,38 @@
 from rest_framework import generics, status
-# from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Card, Deck
-from .serializers import CardSerializer, DeckSerializer
+from .serializers import CardSerializer, DeckSerializer, LoginSerializer
 
-# Create your views here.
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data["user"]
+
+        token, _ = Token.objects.get_or_create(user=user) # "created" not osed so _
+
+        return Response({
+            'token': token.key,
+            'user_id': user.id,
+            'username': user.username,
+        })
+
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        request.user.auth_token.delete()
+        return Response(status=204)
+
+
+
 class DeckCreation(generics.ListCreateAPIView):
     queryset = Deck.objects.all()
     serializer_class = DeckSerializer

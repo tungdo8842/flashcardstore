@@ -38,10 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'api',
     'rest_framework',
-    'rest_framework_simplejwt',
+    'rest_framework.authtoken',
+    # 'rest_framework_simplejwt',
     'corsheaders',
+    'api',
 ]
 
 REST_FRAMEWORK = {
@@ -49,10 +50,11 @@ REST_FRAMEWORK = {
 #     # or allow read-only access for unauthenticated users.
     "DEFAULT_PERMISSION_CLASSES": [
         # "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
-        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    #   'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     )
 }
 
