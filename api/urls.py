@@ -10,5 +10,6 @@ urlpatterns = [
     path("cards/<int:deck_id>/<int:index>/", views.CardRetrieveUpdateDestroy.as_view(), name="card-retrieve-update-destroy"),
 
     path('login/', views.LoginView.as_view(), name="login"),
-    path('logout/}', views.LogoutView.as_view(), name="logout"),
+    path('logout/', views.LogoutView.as_view(), name="logout"),
+    path('register/', views.RegisterView.as_view(), name="register"),
 ]
